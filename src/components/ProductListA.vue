@@ -1,6 +1,6 @@
 <template>
   <div>
-    <da-card icon="category" title="Товары" wideToolbar>
+    <da-card icon="shopping_cart" title="Товары" wideToolbar>
       <template v-slot:toolbar-items>
         <v-text-field
           v-model="search"
@@ -55,7 +55,14 @@
           >
             edit
           </v-icon>
-          <v-icon @click="deleteProd(item)"> mdi-delete </v-icon>
+          <a-popconfirm
+            title="Вы действительно хотите удалить товар?"
+            ok-text="Да"
+            cancel-text="Нет"
+            @confirm="deleteProd(item)"
+          >
+            <v-icon> mdi-delete </v-icon>
+          </a-popconfirm>
         </template>
       </v-data-table>
     </da-card>
@@ -208,8 +215,11 @@ export default {
     },
     async deleteProd(prod) {
       await Vue.$db.collection("product").doc(prod.id).delete();
-      this.deleleFile(prod.img);
+      if (prod.img) {
+        this.deleleFile(prod.img);
+      }
       this.fetchProducts();
+      this.$message.success("Товар успешно удален");
     },
     deleleFile(imgUrl) {
       const parts = imgUrl.split("?");

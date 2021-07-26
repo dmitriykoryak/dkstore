@@ -27,3 +27,9 @@ Vue.use(VueCurrencyFilter, {
   symbolSpacing: true,
   avoidEmptyDecimals: undefined,
 });
+
+// Ant design for Vue
+import { Popconfirm, message } from "ant-design-vue";
+import "ant-design-vue/dist/antd.css";
+Vue.use(Popconfirm);
+Vue.prototype.$message = message;

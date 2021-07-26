@@ -89,7 +89,14 @@
       </template>
 
       <template v-slot:item.actions="{ item }">
-        <v-icon @click="deleteCat(item.id)"> mdi-delete </v-icon>
+        <a-popconfirm
+          title="Вы действительно хотите удалить категорию?"
+          ok-text="Да"
+          cancel-text="Нет"
+          @confirm="deleteCat(item.id)"
+        >
+          <v-icon> mdi-delete </v-icon>
+        </a-popconfirm>
       </template>
 
       <template v-slot:footer.prepend>
@@ -172,6 +179,7 @@ export default {
     deleteCat(catId) {
       Vue.$db.collection("category").doc(catId).delete();
       this.fetchCategories();
+      this.$message.success("Категория успешно удалена");
     },
     catForSelect(catId) {
       return this.categories
