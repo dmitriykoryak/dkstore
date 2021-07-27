@@ -10,6 +10,7 @@ import ProfileViewA from "@/views/admin/ProfileViewA.vue";
 import СategoryViewA from "@/views/admin/СategoryViewA.vue";
 import ProductViewA from "@/views/admin/ProductViewA.vue";
 import SettingsViewA from "@/views/admin/SettingsViewA.vue";
+import ParamViewA from "@/views/admin/ParamViewA.vue";
 import $store from "@/store/index.js";
 
 Vue.use(VueRouter);
@@ -67,6 +68,13 @@ const routes = [
   {
     path: "/admin/settings",
     component: SettingsViewA,
+    meta: {
+      admin: true,
+    },
+  },
+  {
+    path: "/admin/params",
+    component: ParamViewA,
     meta: {
       admin: true,
     },

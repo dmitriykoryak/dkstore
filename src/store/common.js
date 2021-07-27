@@ -7,7 +7,9 @@ export default {
     error: null,
     categories: [],
     products: [],
+    params: [],
   },
+
   mutations: {
     setError(store, payload) {
       store.error = payload;
@@ -21,7 +23,11 @@ export default {
     setProducts(store, payload) {
       store.products = payload;
     },
+    setParams(store, payload) {
+      store.params = payload;
+    },
   },
+
   actions: {
     async fetchCategories({ commit, state }, payload) {
       payload = payload || { reload: true };
@@ -41,6 +47,7 @@ export default {
       });
       commit("setCategories", categories);
     },
+
     async fetchProducts({ commit, state }, payload) {
       payload = payload || { reload: true };
       if (!payload.reload && state.products.length) return;
@@ -59,7 +66,28 @@ export default {
       });
       commit("setProducts", products);
     },
+
+    async fetchParams({ commit, state }, payload) {
+      payload = payload || { reload: true };
+      if (!payload.reload && state.params.length) return;
+
+      const querySnapshot = await Vue.$db
+        .collection("param")
+        .orderBy("paramName", "asc")
+        .get();
+
+      let params = [];
+      querySnapshot.forEach((s) => {
+        params.push({
+          id: s.id,
+          ...s.data(),
+        });
+      });
+
+      commit("setParams", params);
+    },
   },
+
   getters: {
     /**
      * Локализация валидации

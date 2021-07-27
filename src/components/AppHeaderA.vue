@@ -10,6 +10,10 @@
     <v-toolbar-items>
       <da-dark-theme-button></da-dark-theme-button>
 
+      <v-btn v-if="isUserAuth" text to="/admin/params">
+        <v-icon left>widgets</v-icon>
+        <span>Параметры</span>
+      </v-btn>
       <v-btn v-if="isUserAuth" text to="/admin/products">
         <v-icon left>shopping_cart</v-icon>
         <span>Товары</span>
