@@ -1,23 +1,21 @@
 <template>
   <div>
-    <div>
-      <p>Изображение:</p>
-      <da-img class="preview" :src="value" width="200" />
-      <input
-        :key="value"
-        type="file"
-        @change="previewImage"
-        accept="image/*"
-        class="mt-3"
-      />
-    </div>
-    <div>
-      <p class="mt-1">
-        {{ uploadValue.toFixed() + "%" }}
-        <progress id="progress" :value="uploadValue" max="100"></progress>
-      </p>
-    </div>
-    <div></div>
+    <p>Изображение:</p>
+
+    <a-upload
+      name="avatar"
+      list-type="picture-card"
+      class="avatar-uploader"
+      :show-upload-list="false"
+      :action="prepare"
+    >
+      <da-img v-if="value" :src="value" width="102" />
+
+      <div v-else>
+        <a-icon :type="!!uploadValue ? 'loading' : 'plus'" />
+        <div class="ant-upload-text">Upload</div>
+      </div>
+    </a-upload>
   </div>
 </template>
 
@@ -35,33 +33,31 @@ export default {
     value: String,
   },
   methods: {
-    previewImage(event) {
+    prepare(file) {
       this.uploadValue = 0;
       if (this.value) {
         this.deleleFile(this.value);
       }
 
       this.$emit("input", null);
-      this.imageData = event.target.files[0];
+      this.imageData = file;
       this.uploadImg();
     },
 
     uploadImg() {
+      this.loading = true;
       const storageRef = firebase
         .storage()
         .ref(`${this.imageData.name}`)
         .put(this.imageData);
       storageRef.on(
         `state_changed`,
-        (snapshot) => {
-          this.uploadValue =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        },
+        () => {},
         (error) => {
           console.log(error.message);
         },
         () => {
-          this.uploadValue = 100;
+          this.loading = false;
           storageRef.snapshot.ref.getDownloadURL().then((url) => {
             this.$emit("input", url);
           });

@@ -29,7 +29,9 @@ Vue.use(VueCurrencyFilter, {
 });
 
 // Ant design for Vue
-import { Popconfirm, message } from "ant-design-vue";
+import { Popconfirm, Upload, Icon, message } from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 Vue.use(Popconfirm);
+Vue.use(Icon);
+Vue.use(Upload);
 Vue.prototype.$message = message;
